@@ -1,0 +1,59 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Gestión de Proyectos</h1>
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+      Nuevo Proyecto
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <mat-card *ngFor="let proyecto of proyectos()" class="hover:shadow-lg transition-shadow">
+      <mat-card-header>
+        <mat-card-title class="text-lg font-semibold">{{ proyecto.nombre }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ proyecto.departamento.nombre }} - {{ proyecto.ciudad.nombre }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="py-4">
+        <div class="space-y-2">
+          <div class="flex items-center text-sm text-gray-600">
+            <mat-icon class="mr-2 text-base">build</mat-icon>
+            <span>{{ proyecto.proyectoMateriales.length }} materiales asignados</span>
+          </div>
+          <div class="flex items-center text-sm text-gray-600">
+            <mat-icon class="mr-2 text-base">attach_money</mat-icon>
+            <span>Costo estimado: {{ getCostoTotal(proyecto) | currency:'COP':'symbol':'1.0-0' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="flex justify-between">
+        <div>
+          <button mat-icon-button color="primary" (click)="editProyecto(proyecto)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="viewMateriales(proyecto)" matTooltip="Ver materiales">
+            <mat-icon>list</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteProyecto(proyecto)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <button mat-button color="primary" (click)="viewReporte(proyecto)">
+          <mat-icon>assessment</mat-icon>
+          Reporte
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="proyectos().length === 0" class="text-center py-12">
+    <mat-icon class="text-6xl text-gray-400 mb-4">business</mat-icon>
+    <p class="text-xl text-gray-500">No hay proyectos registrados</p>
+    <button mat-raised-button color="primary" (click)="openDialog()" class="mt-4">
+      Crear primer proyecto
+    </button>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Unidad' : 'Nueva Unidad' }}</h2>
+
+<mat-dialog-content class="py-4">
+  <form [formGroup]="unidadForm" class="space-y-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ej: Metro cuadrado">
+      <mat-error *ngIf="unidadForm.get('nombre')?.hasError('required')">
+        El nombre es requerido
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Símbolo</mat-label>
+      <input matInput formControlName="simbolo" placeholder="Ej: M²">
+      <mat-error *ngIf="unidadForm.get('simbolo')?.hasError('required')">
+        El símbolo es requerido
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="p-4">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="unidadForm.invalid || loading">
+    {{ loading ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

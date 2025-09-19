@@ -1,0 +1,55 @@
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Gestión de Materiales</h1>
+    <button mat-raised-button color="primary" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+      Nuevo Material
+    </button>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <mat-table [dataSource]="materiales()" class="w-full">
+      <!-- Código Column -->
+      <ng-container matColumnDef="codigo">
+        <mat-header-cell *matHeaderCellDef class="font-semibold">Código</mat-header-cell>
+        <mat-cell *matCellDef="let material">{{ material.codigo }}</mat-cell>
+      </ng-container>
+
+      <!-- Descripción Column -->
+      <ng-container matColumnDef="descripcion">
+        <mat-header-cell *matHeaderCellDef class="font-semibold">Descripción</mat-header-cell>
+        <mat-cell *matCellDef="let material">{{ material.descripcion }}</mat-cell>
+      </ng-container>
+
+      <!-- Unidad Column -->
+      <ng-container matColumnDef="unidad">
+        <mat-header-cell *matHeaderCellDef class="font-semibold">Unidad</mat-header-cell>
+        <mat-cell *matCellDef="let material">{{ material.unidad.simbolo }}</mat-cell>
+      </ng-container>
+
+      <!-- Precio Column -->
+      <ng-container matColumnDef="precio">
+        <mat-header-cell *matHeaderCellDef class="font-semibold">Precio</mat-header-cell>
+        <mat-cell *matCellDef="let material">{{ material.precio | currency:'COP':'symbol':'1.0-0' }}</mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef class="font-semibold">Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let material">
+          <button mat-icon-button color="primary" (click)="editMaterial(material)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteMaterial(material)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>
