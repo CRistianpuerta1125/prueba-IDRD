@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Unidad {
+  id          Int         @id @default(autoincrement())
+  nombre      String      @unique
+  simbolo     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  materiales  Material[]
+
+  @@map("unidades")
+}
+
+model Departamento {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  ciudades  Ciudad[]
+  proyectos Proyecto[]
+
+  @@map("departamentos")
+}
+
+model Ciudad {
+  id             Int          @id @default(autoincrement())
+  nombre         String
+  departamentoId Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  departamento   Departamento @relation(fields: [departamentoId], references: [id])
+  proyectos      Proyecto[]
+
+  @@unique([nombre, departamentoId])
+  @@map("ciudades")
+}
+
+model Material {
+  id                    Int                     @id @default(autoincrement())
+  codigo                String                  @unique
+  descripcion           String
+  unidadId              Int
+  precio                Float
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  unidad                Unidad                  @relation(fields: [unidadId], references: [id])
+  proyectoMateriales    ProyectoMaterial[]
+
+  @@map("materiales")
+}
+
+model Proyecto {
+  id                    Int                     @id @default(autoincrement())
+  nombre                String
+  departamentoId        Int
+  ciudadId              Int
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  departamento          Departamento            @relation(fields: [departamentoId], references: [id])
+  ciudad                Ciudad                  @relation(fields: [ciudadId], references: [id])
+  proyectoMateriales    ProyectoMaterial[]
+
+  @@map("proyectos")
+}
+
+model ProyectoMaterial {
+  id          Int       @id @default(autoincrement())
+  proyectoId  Int
+  materialId  Int
+  cantidad    Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  proyecto    Proyecto  @relation(fields: [proyectoId], references: [id], onDelete: Cascade)
+  material    Material  @relation(fields: [materialId], references: [id])
+
+  @@unique([proyectoId, materialId])
+  @@map("proyecto_materiales")
+}
